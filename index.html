@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @font-face{
+            font-family:"RTC";
+            src:url("./BeautyMountainsPersonalUse-od7z.ttf")
+        }
+        .heading{
+            text-align: center;
+            color: rgb(14, 15, 14);
+            font-size: 50px;
+            font-family:"RTC";
+            src:url("./BeautyMountainsPersonalUse-od7z.ttf")
+        }
+        
+        .todo-item {
+            border: 4px double #000399;
+            padding: 5px;
+            margin: 5px;
+            border-radius: 5px;
+            background-color: #f2ccff;
+            color: #360099;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn {
+            background-color: rgb(59, 12, 3);
+            color: white;
+            font-size: 9px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            height: 16px;
+        }
+        .tasks-container{
+            height: 250;
+            overflow-y: scroll;
+        }
+        .task-input-container{
+            display: flex;
+            justify-content: space-around;
+            margin: 10px;
+        }
+        .task-input{
+            width: 50%;
+            border-radius: 10px;
+            padding: 5px;
+            border:2px solid #170099;
+        }
+        .btn-add{
+            border-radius: 40px;
+            background-color: #730099;
+            color: white;
+            padding: 5px 30px;
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="heading">To Do App</h1>
+    
+    
+    <script>
+        const tasks = [];
+
+        function loadFromLocalStorage(){
+            const allTasks = JSON.parse(localStorage.getItem('allTasks'));
+
+            if (allTasks) {
+                tasks.push(...allTasks)
+            }
+            loadTasks();
+        }
+        loadFromLocalStorage();
+
+
+        function loadTasks() {
+            localStorage.setItem('allTasks', JSON.stringify(tasks));
+
+            const tasksContainer = document.getElementById('tasks-container');
+            tasksContainer.innerHTML = '';
+
+            for (const task of tasks) {
+                tasksContainer.innerHTML += `
+                
+                <div class="todo-item">
+                    ${task}
+                    <button class="btn" type="button" onclick="deleteTask('${task}')">
+                        Delete</button>
+                    </div>
+                    `
+            }
+        }
+
+
+        function deleteTask(task) {
+            const taskIndex = tasks.indexOf(task);
+            tasks.splice(taskIndex, 1);
+
+            loadTasks();
+        }
+
+        function addTask(){
+            const taskInputElement = document.getElementById('task-input');
+            const task = taskInputElement.value;
+            if(!task){
+                alert('Please enter a task');
+                return;
+            }
+
+            tasks.unshift(task);
+            loadTasks();
+
+            taskInputElement.value ='';
+        }
+
+
+    </script>
+</body>
+
+</html>
